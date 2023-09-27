@@ -8,6 +8,7 @@ A Python implementation of a multi-layer perceptron (MLP) neural network using N
 
 - [Introduction](#introduction)
 - [Key Features](#key-features)
+- [Upcoming Extensions](#upcoming-extensions)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
 - [Author](#author)
@@ -26,6 +27,12 @@ for building more complex neural networks as the code was designed to be flexibl
 - **Layer and Neuron Objects:** Layers and neurons are represented as objects, allowing for a more intuitive understanding of neural network structure.
 - **Flexible structure:** New activations/loss/optimizations can be added and work straight away.
 - **Above and beyond:** Further extensions towards more advanced concepts of neural networks are currently under consideration.
+
+## Upcoming Extensions
+
+- **Mini-batch backpropagation:** Only instance-based training is currently available.
+- **Momentum in SGD**
+- **Adam Optimization**
 
 ## Getting Started
 
