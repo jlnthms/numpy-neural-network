@@ -56,7 +56,7 @@ To run this project, you'll need:
 2. Install the required dependencies:
 
    ```bash
-   pip install requirements.txt
+   pip install -r requirements.txt
    ```
 
 ## Usage
