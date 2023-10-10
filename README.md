@@ -31,9 +31,9 @@ for building more complex neural networks as the code was designed to be flexibl
 ## Upcoming Extensions
 
 - **Mini-batch backpropagation:** Only instance-based training is currently available.
-- **Adam Optimization** Only SGD is implemented at the moment.
-- **Possibility to save a model** weights can be saved to a file to run some experiments without retraining.
-- **Dropout regularization** Randomly deleting connections between neurons help reducing redundancy and improve robustness.
+- **Adam Optimization:** Only SGD is implemented at the moment.
+- **Possibility to save a model:** weights can be saved to a file to run some experiments without retraining.
+- **Dropout regularization:** Randomly deleting connections between neurons help reducing redundancy and improve robustness.
 
 ## Getting Started
 
@@ -67,6 +67,9 @@ classification, however here is a more generic example:
    
    ```python
    # Import necessary modules
+   import sys
+   sys.path.append('../')
+
    from NeuralNetwork.network import MultiLayerPerceptron
    from NeuralNetwork.loss import *
    from NeuralNetwork.optimizer import SGD
