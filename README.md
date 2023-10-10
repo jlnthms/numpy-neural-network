@@ -31,8 +31,9 @@ for building more complex neural networks as the code was designed to be flexibl
 ## Upcoming Extensions
 
 - **Mini-batch backpropagation:** Only instance-based training is currently available.
-- **Momentum in SGD**
-- **Adam Optimization**
+- **Adam Optimization** Only SGD is implemented at the moment.
+- **Possibility to save a model** weights can be saved to a file to run some experiments without retraining.
+- **Dropout regularization** Randomly deleting connections between neurons help reducing redundancy and improve robustness.
 
 ## Getting Started
 
