@@ -1,12 +1,12 @@
+from typing import Tuple
+
 import numpy as np
 
 
 class Kernel:
-    def __init__(self, array: np.ndarray):
-        self.array = array
-
-    def shape(self):
-        return self.array.shape if self.array else None
+    def __init__(self, size: Tuple[int, int]):
+        self.size = size
+        self.array = np.zeros(size)
 
     def convolve(self, image: np.ndarray, stride=1, padding=0):
         kh, kw = self.array.shape
@@ -28,23 +28,21 @@ class Kernel:
 class GaussianKernel(Kernel):
     def __init__(self, sigma, size):
         array = np.array([])
-        super().__init__(array)
+        super().__init__(size)
         self.sigma = sigma
-        self.size = size
-
         # Create the Gaussian kernel array
         kernel = np.fromfunction(
             lambda x, y: (1 / (2 * np.pi * self.sigma ** 2)) * np.exp(
-                -((x - self.size // 2) ** 2 + (y - self.size // 2) ** 2) / (2 * self.sigma ** 2)),
-            (self.size, self.size)
+                -((x - self.size[0] // 2) ** 2 + (y - self.size[1] // 2) ** 2) / (2 * self.sigma ** 2)),
+            self.size
         )
         self.array = kernel / np.sum(kernel)  # Normalize the kernel
 
 
 class EdgeDetectionKernel(Kernel):
-    def __init__(self):
+    def __init__(self, size):
+        super().__init__(size)
         # Define the kernel elements for edge detection
-        kernel_elements = np.array([[-1, -1, -1],
+        self.array = np.array([[-1, -1, -1],
                                     [-1, 8, -1],
                                     [-1, -1, -1]], dtype=np.int32)
-        super().__init__(kernel_elements)
