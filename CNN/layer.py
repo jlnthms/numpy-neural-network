@@ -31,14 +31,15 @@ class ConvLayer(Layer):
 
 
 class PoolLayer(Layer):
-    def __init__(self, pool_shape: Tuple[int, int], stride=1):
+    def __init__(self, pool_shape: Tuple[int, int], stride=1, method='max'):
         super().__init__()
         self.pool_shape = pool_shape
         self.stride = stride
+        self.method = method
 
-    def pool(self, method: str):
-        if method not in ['max', 'average']:
-            raise ValueError(f'Non-valid Pooling method: {method}')
+    def pool(self):
+        if self.method not in ['max', 'average']:
+            raise ValueError(f'Non-valid Pooling method: {self.method}')
 
         for feature_map in self.inputs:
             ph, pw = self.pool_shape
@@ -51,7 +52,7 @@ class PoolLayer(Layer):
                 for i in range(0, ih - ph + 1, self.stride):
                     for j in range(0, iw - pw + 1, self.stride):
                         region = feature_map[i:i + ph, j:j + pw, c]
-                        if method == 'max':
+                        if self.method == 'max':
                             pooled_fm[i // self.stride, j // self.stride, c] = np.max(region)
                         else:
                             pooled_fm[i // self.stride, j // self.stride, c] = np.mean(region)
@@ -64,5 +65,5 @@ class FlatLayer(Layer):
         super().__init__()
 
     def flatten(self):
-        for feature_map in self.inputs:
-            self.output.append(feature_map.flatten())
+        classifier_input = [feature_map.flatten() for feature_map in self.inputs]
+        self.output.append(np.concatenate(classifier_input, axis=1))
