@@ -110,7 +110,7 @@ class MultiLayerPerceptron:
             curr_layer, prev_layer = self.layers[i], self.layers[i+1]
             curr_layer.backward(prev_layer, grad_wrt_outputs, grads_w, grads_b)
 
-        return grads_w, grads_b
+        return grads_w, grads_b, grad_wrt_outputs
 
     def print(self):
         pass
