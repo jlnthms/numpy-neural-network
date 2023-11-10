@@ -1,7 +1,14 @@
 from typing import Tuple
-import numpy as np
 
 from CNN.kernel import Kernel
+from CNN.activation import *
+
+activation_functions = {
+    'relu': relu,
+    'tanh': tanh,
+    'leaky_relu': leaky_relu,
+    # Add more activation functions as needed
+}
 
 
 class Layer:
@@ -15,19 +22,22 @@ class ConvLayer(Layer):
         super().__init__()
         self.size = size
         self.kernels = [Kernel(kernel_size) for _ in range(size)]
+        self.biases = []
 
-        self.activation = activation
-        if activation == 'leaky_relu':
-            pass
+        if activation in activation_functions:
+            self.activation = activation_functions[activation]
         else:
-            pass
+            raise ValueError("Invalid activation function name")
 
     def convolve(self, stride=1, padding=0):
         for image in self.inputs:
             for kernel in self.kernels:
-                # TODO: add activation (e.g Leaky ReLu etc)
                 output_feature_map = kernel.convolve(image, stride, padding)
                 self.output.append(output_feature_map)
+
+    def activate(self):
+        for i, feature_map in enumerate(self.output):
+            self.output[i] = self.activation(feature_map)
 
 
 class PoolLayer(Layer):
