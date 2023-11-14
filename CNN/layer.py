@@ -7,7 +7,7 @@ activation_functions = {
     'relu': relu,
     'tanh': tanh,
     'leaky_relu': leaky_relu,
-    # Add more activation functions as needed
+    # Add more
 }
 
 
@@ -31,9 +31,13 @@ class ConvLayer(Layer):
 
     def convolve(self, stride=1, padding=0):
         for image in self.inputs:
+            feature_maps = []
             for kernel in self.kernels:
-                output_feature_map = kernel.convolve(image, stride, padding)
-                self.output.append(output_feature_map)
+                # each IFM is convolved to a kernel
+                feature_maps.append(kernel.convolve(image, stride, padding))
+            # the OFM for this kernel is the sum of all convolutions
+            output_feature_map = np.sum(feature_maps, axis=0)
+            self.output.append(output_feature_map)
 
     def activate(self):
         for i, feature_map in enumerate(self.output):
