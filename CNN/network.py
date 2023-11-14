@@ -24,7 +24,9 @@ class ConvNeuralNet:
 
     def forward(self, image):
         self.layers[0].inputs.append(image)
-        for layer in self.layers:
+        for i, layer in enumerate(self.layers):
+            if i != 0:
+                layer.inputs = self.layers[i-1].output
             if isinstance(layer, ConvLayer):
                 layer.convolve()
                 layer.activate()
