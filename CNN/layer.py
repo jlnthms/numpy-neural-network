@@ -57,19 +57,30 @@ class PoolLayer(Layer):
 
         for feature_map in self.inputs:
             ph, pw = self.pool_shape
-            ih, iw, num_channels = feature_map.shape
+            ih, iw = feature_map.shape[0], feature_map.shape[1]
             output_h = (ih - ph) // self.stride + 1
             output_w = (iw - pw) // self.stride + 1
-            pooled_fm = np.zeros((output_h, output_w, num_channels), dtype=feature_map.dtype)
-
+            if len(feature_map.shape) > 2:
+                pooled_fm = np.zeros((output_h, output_w, len(feature_map.shape)), dtype=feature_map.dtype)
+                num_channels = feature_map.shape[2]
+            else:
+                pooled_fm = np.zeros((output_h, output_w), dtype=feature_map.dtype)
+                num_channels = 1
             for c in range(num_channels):
                 for i in range(0, ih - ph + 1, self.stride):
                     for j in range(0, iw - pw + 1, self.stride):
-                        region = feature_map[i:i + ph, j:j + pw, c]
+                        region = feature_map[i:i + ph, j:j + pw, c] if num_channels > 1 \
+                            else feature_map[i:i + ph, j:j + pw]
                         if self.method == 'max':
-                            pooled_fm[i // self.stride, j // self.stride, c] = np.max(region)
+                            if num_channels > 1:
+                                pooled_fm[i // self.stride, j // self.stride, c] = np.max(region)
+                            else:
+                                pooled_fm[i // self.stride, j // self.stride] = np.max(region)
                         else:
-                            pooled_fm[i // self.stride, j // self.stride, c] = np.mean(region)
+                            if num_channels > 1:
+                                pooled_fm[i // self.stride, j // self.stride, c] = np.mean(region)
+                            else:
+                                pooled_fm[i // self.stride, j // self.stride] = np.mean(region)
 
             self.output.append(pooled_fm)
 
