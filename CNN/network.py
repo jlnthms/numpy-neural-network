@@ -7,15 +7,20 @@ from NeuralNetwork.network import MultiLayerPerceptron
 class ConvNeuralNet:
     def __init__(self, layers: List[Layer], classifier: MultiLayerPerceptron):
         self.layers = layers
+        # TODO: the argument should only be a list of Dense layers (from NeuralNetwork) and the classifier is created
+        #  in the constructor, input size is computed from the architecture size reduction and output size from label
+        #  size.
         self.classifier = classifier
 
     def he_initialization(self):
+        output_size = 1
         for i, layer in enumerate(self.layers):
             if isinstance(layer, ConvLayer):
                 for kernel in layer.kernels:
-                    fan_in = len(self.layers[i - 1].output)
+                    fan_in = layer.size * output_size
                     std_dev = np.sqrt(2.0 / fan_in)
-                    kernel.array = np.random.randn(*kernel.weights.shape) * std_dev
+                    kernel.array = np.random.randn(*kernel.array.shape) * std_dev
+                    output_size = layer.size
 
     def forward(self, image):
         self.layers[0].inputs.append(image)
@@ -38,6 +43,7 @@ class ConvNeuralNet:
 
         # Unflatten grad_wrt_outputs to the shape of the last layer's output
         grad_wrt_outputs = grad_wrt_outputs.reshape(np.array(self.layers[-1].inputs).shape)
+        grads_k = []
 
         for layer in self.layers[::-1]:
             if isinstance(layer, ConvLayer):
@@ -59,6 +65,8 @@ class ConvNeuralNet:
                     for j in range(len(layer.kernels)):
                         grad_wrt_outputs[i] += np.convolve(layer.kernels[j].array, gradient, 'full')
 
+                grads_k.insert(0, kernel_gradients)
+
             if isinstance(layer, PoolLayer):
                 if layer.method == 'max':
                     gradient_map = np.zeros_like(layer.inputs[0])
@@ -77,8 +85,8 @@ class ConvNeuralNet:
                     for i in range(len(layer.output)):
                         for j in range(len(layer.output[i])):
                             for k in range(len(layer.output[i][j])):
-                                region = layer.inputs[i][j * layer.stride:(j * layer.stride) + layer.pool_shape[0],
-                                         k * layer.stride:(k * layer.stride) + layer.pool_shape[1]]
                                 gradient_map[j * layer.stride:(j * layer.stride) + layer.pool_shape[0],
                                 k * layer.stride:(k * layer.stride) + layer.pool_shape[1]] += grad_wrt_outputs[i][j][k] / (layer.pool_shape[0] * layer.pool_shape[1])
                     grad_wrt_outputs = gradient_map
+
+        return grads_k
