@@ -85,6 +85,7 @@ class Layer:
         grads_b.insert(0, grad_wrt_biases)
         # activations are the output of the layer on the left (next iteration)
         grad_wrt_outputs = grad_wrt_activations
+        return grad_wrt_outputs
 
     def get_output(self):
         """

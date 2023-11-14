@@ -108,7 +108,7 @@ class MultiLayerPerceptron:
         for i in range(len(self.layers) - 2, 0, -1):
             # Compute gradient of activations for the current layer
             curr_layer, prev_layer = self.layers[i], self.layers[i+1]
-            curr_layer.backward(prev_layer, grad_wrt_outputs, grads_w, grads_b)
+            grad_wrt_outputs = curr_layer.backward(prev_layer, grad_wrt_outputs, grads_w, grads_b)
 
         return grads_w, grads_b, grad_wrt_outputs
 
