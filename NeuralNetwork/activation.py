@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def identity(x):
+def identity(x, derivative=False):
     return x
 
 
