@@ -30,9 +30,9 @@ class ConvLayer(Layer):
             raise ValueError("Invalid activation function name")
 
     def convolve(self, stride=1, padding=0):
-        for image in self.inputs:
+        for kernel in self.kernels:
             feature_maps = []
-            for kernel in self.kernels:
+            for image in self.inputs:
                 # each IFM is convolved to a kernel
                 feature_maps.append(kernel.convolve(image, stride, padding))
             # the OFM for this kernel is the sum of all convolutions
@@ -91,4 +91,4 @@ class FlatLayer(Layer):
 
     def flatten(self):
         classifier_input = [feature_map.flatten() for feature_map in self.inputs]
-        self.output.append(np.concatenate(classifier_input, axis=1))
+        self.output.append(np.concatenate(classifier_input))
