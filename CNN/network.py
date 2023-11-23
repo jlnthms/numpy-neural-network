@@ -26,8 +26,14 @@ class ConvNeuralNet:
         self.classifier.he_init()
 
     def forward(self, image):
+        if self.layers[0].inputs:
+            self.layers[0].inputs = []
         self.layers[0].inputs.append(image)
         for i, layer in enumerate(self.layers):
+            # clear output from previous pass
+            if layer.output:
+                layer.output = []
+            # replace inputs with output of the previous layer (if previous)
             if i != 0:
                 layer.inputs = self.layers[i - 1].output
             if isinstance(layer, ConvLayer):
