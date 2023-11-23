@@ -34,11 +34,7 @@ class ConvLayer(Layer):
         if self.output:
             self.output = []
         for kernel in self.kernels:
-            feature_maps = []
-            for image in self.inputs:
-                # each IFM is convolved to a kernel
-                feature_maps.append(kernel.convolve(image, stride, padding))
-            # the OFM for this kernel is the sum of all convolutions
+            feature_maps = [kernel.convolve(image, stride, padding) for image in self.inputs]
             output_feature_map = np.sum(feature_maps, axis=0)
             self.output.append(output_feature_map)
 
