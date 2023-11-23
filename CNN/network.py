@@ -44,7 +44,7 @@ class ConvNeuralNet:
 
     def backward(self, label):
         # Compute the gradient of the loss with respect to the output of the classifier
-        grad_wrt_outputs = self.classifier.backward(label)[2]
+        grad_class_w, grad_class_b, grad_wrt_outputs = self.classifier.backward(label)
         grad_wrt_outputs = np.dot(grad_wrt_outputs, self.classifier.layers[1].get_weights()) * 1
 
         # Unflatten grad_wrt_outputs to the shape of the last layer's output
@@ -100,4 +100,4 @@ class ConvNeuralNet:
                                     gradient_maps[i][h:h + layer.pool_shape[0], w:w + layer.pool_shape[1]] += \
                                         grad_wrt_output[h // layer.stride, w // layer.stride] / (layer.pool_shape[0] * layer.pool_shape[1])
                 grad_wrt_outputs = gradient_maps
-        return grads_k
+        return grad_class_w, grad_class_b, grads_k
