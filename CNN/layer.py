@@ -30,9 +30,6 @@ class ConvLayer(Layer):
             raise ValueError("Invalid activation function name")
 
     def convolve(self, stride=1, padding=0):
-        # clear output from previous pass
-        if self.output:
-            self.output = []
         for kernel in self.kernels:
             feature_maps = [kernel.convolve(image, stride, padding) for image in self.inputs]
             output_feature_map = np.sum(feature_maps, axis=0)
@@ -51,9 +48,6 @@ class PoolLayer(Layer):
         self.method = method
 
     def pool(self):
-        # clear output from previous pass
-        if self.output:
-            self.output = []
         if self.method not in ['max', 'average']:
             raise ValueError(f'Non-valid Pooling method: {self.method}')
 
@@ -93,6 +87,4 @@ class FlatLayer(Layer):
 
     def flatten(self):
         classifier_input = [feature_map.flatten() for feature_map in self.inputs]
-        if self.output:
-            self.output.pop()
         self.output.append(np.concatenate(classifier_input))
