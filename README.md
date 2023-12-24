@@ -2,7 +2,7 @@
 
 A Python implementation of a multi-layer perceptron (MLP) neural network, and convolutional neural network (CNN) using NumPy.
 
-![Neural Network](https://github.com/jlnthms/numpy-neural-network/assets/74052135/0cac744a-4742-4eb1-8f92-0c183acb0987)
+![Neural Network](https://github.com/jlnthms/numpy-neural-network/assets/74052135/5e20644a-bb2c-4697-99c9-335a154e75b8)
 
 ## Table of Contents
 
