@@ -72,7 +72,7 @@ class Layer:
             grads_b (list or np.ndarray): array storing gradients w.r.t biases for every layer.
 
         Returns:
-            None
+            grad_wrt_outputs (list or np.ndarray): new gradients w.r.t outputs.
         """
         act_derivatives = [self.activation(n.output, derivative=True) for n in self.neurons]
         grad_wrt_activations = np.dot(grad_wrt_outputs, prev_layer.get_weights()) * act_derivatives
