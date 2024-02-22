@@ -1,3 +1,13 @@
+"""
+Optimizer
+
+This module contains the Optimizer class that is instanced during
+the training of ConvNeuralNet.
+
+Author: Julien THOMAS
+Date: November 04, 2023
+"""
+
 from typing import List
 
 from CNN.layer import *
