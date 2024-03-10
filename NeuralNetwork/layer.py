@@ -28,7 +28,7 @@ class Layer:
         get_output(): getter on the output of the neurons.
         get_weight(): getter on the weights of the neurons.
     """
-    def __init__(self, size=0, activation=None):
+    def __init__(self, size=0, activation=None, dropout=1):
         """
         Initializes a new instance of Layer.
 
@@ -41,6 +41,7 @@ class Layer:
             self.activation = relu
         else:
             self.activation = identity
+        self.dropout = dropout
 
     def __len__(self):
         return len(self.neurons)
