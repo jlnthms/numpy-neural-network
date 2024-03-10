@@ -6,9 +6,10 @@ This module contains the Layer class.
 Author: Julien THOMAS
 Date: June 02, 2023
 """
-
 from NeuralNetwork.neuron import Neuron
 from NeuralNetwork.activation import *
+
+from random import random
 
 
 class Layer:
@@ -47,6 +48,12 @@ class Layer:
     def __len__(self):
         return len(self.neurons)
 
+    def dropout(self):
+        for neuron in self.neurons:
+            if random() < self.dropout_rate:
+                # deactivate the neuron
+                neuron.is_active = False
+
     def forward(self, inputs):
         """
         Sets neurons' input and then calls the activation function.
@@ -58,8 +65,9 @@ class Layer:
             None
         """
         for neuron in self.neurons:
-            neuron.inputs = inputs
-            neuron.activate()
+            if neuron.is_active:
+                neuron.inputs = inputs
+                neuron.activate()
 
     def backward(self, prev_layer, grad_wrt_outputs, grads_w, grads_b):
         """
@@ -76,7 +84,8 @@ class Layer:
         Returns:
             None
         """
-        act_derivatives = [self.activation(n.output, derivative=True) for n in self.neurons]
+        act_derivatives = [self.activation(n.output, derivative=True)
+                           for n in self.neurons if n.is_active]
         grad_wrt_activations = np.dot(grad_wrt_outputs, prev_layer.get_weights()) * act_derivatives
 
         # Compute gradient of weights and biases for the current layer
@@ -109,11 +118,12 @@ class Layer:
 
     def get_weights(self):
         """
-        Getter on the weights of the layer (e.g. all the weighting factors on the layer's input)
+        Getter on the weights of the layer (e.g. all the weighting factors on the layer's input).
+        The method returns the weights of currently active neurons.
 
         Returns:
             list: array of the layer's weights
         """
-        return [n.weights for n in self.neurons]
+        return [n.weights for n in self.neurons if n.is_active]
 
 
