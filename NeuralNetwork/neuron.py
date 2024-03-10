@@ -42,6 +42,7 @@ class Neuron:
         self.inputs = []
         self.weights = []
         self.bias = 0.0
+        self.is_active = True
         if activation == 'relu':
             self.activation = relu
         else:
