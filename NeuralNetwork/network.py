@@ -83,6 +83,8 @@ class MultiLayerPerceptron:
             input_layer.neurons[i].output = X[i]
         # Activate each neuron of each layer from left to right (except input of course)
         for i, layer in enumerate(self.layers[1:], 1):
+            if layer.dropout_rate < 1:
+                layer.dropout()
             layer.forward([n.output for n in self.layers[i - 1].neurons])
 
     def backward(self, y):
