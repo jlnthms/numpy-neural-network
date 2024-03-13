@@ -97,7 +97,7 @@ class MultiLayerPerceptron:
             y (list or numpy.ndarray): label(s) of the input(s) just passed forward.
 
         Returns:
-            tuple: (numpy.ndarray) gradients w.r.t weights/biases for each layer
+            tuple: (numpy.ndarray) gradients w.r.t weights/biases/outputs for each layer
         """
         # TODO: change with layer.activation()/loss to be flexible
         # compute the gradient of loss with respect to the un-normalized scores of the output layer
